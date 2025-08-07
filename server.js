@@ -3,6 +3,8 @@ var express = require("express");
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
+const {version, validate} = require("uuid");
+
 
 const ACTIONS = require("./src/socket/actions.js");
 
@@ -10,7 +12,7 @@ var PORT = 3001;
 
 function getClientRooms () {
     const {rooms} = io.sockets.adapter;
-    return Array.from(rooms.keys());
+    return Array.from(rooms.keys()).filter(item => validate(item) && version(item) === 4 );
 }
 
 function shareRoomsInfo() {
